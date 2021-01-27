@@ -1,0 +1,22 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form" class="row row-form px-0 pt-4 m-0">
+  
+	<div *ngFor="let control of controls" [class]="control.class">
+	<app-form-control [control]="control" [form]="form"></app-form-control>
+	</div>
+  
+      <!-- <div class="form-row">
+        <button type="submit" [disabled]="!form.valid">Save</button>
+      </div> -->
+	<div class="form-group col-md-3 col-sm-12" *ngIf="resetButton">
+		<button class="primary" (click)="resetForm()" type="button">
+			{{resetLabel}}
+		</button>
+	</div>
+
+</form>
+  
+    <!-- <div *ngIf="payLoad" class="form-row">
+      <strong>Saved the following values</strong><br>{{payLoad}}
+    </div>
+</div>
+   -->

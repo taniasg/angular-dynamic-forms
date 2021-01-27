@@ -1,0 +1,303 @@
+<div [formGroup]="form">
+  
+    <div [ngSwitch]="control.controlType">
+    
+        <!-- INPUT -->
+        <mat-form-field 
+            *ngSwitchCase="'input'" 
+            class="form-group col-md-12 col-sm-12"
+            [appearance]="appearance" 
+            [floatLabel]="floatLabel"
+        >
+            <mat-label 
+                [attr.for]="control.key" 
+                color="secondary"
+            >   
+                {{control.label}}
+            </mat-label>
+            <input 
+                matInput 
+                [formControlName]="control.key" 
+                [type]="control.type"
+                [placeholder]="control.placeholder">
+
+            <!-- Iterar sobre los validators del control y enviar el validador correspondiente -->
+            <mat-error>
+                <ng-container *ngTemplateOutlet="errors"></ng-container>
+            </mat-error>
+
+        </mat-form-field>
+  
+        <!-- SELECT -->
+        <ng-container *ngSwitchCase="'select'">
+            <mat-form-field  
+                *ngIf="catalogues[control.key].length > 14; else select"
+                class="form-group col-md-12 col-sm-12"
+                [appearance]="appearance"
+                [floatLabel]="floatLabel"
+            >
+                <mat-label  
+                    [attr.for]="control.key" 
+                    color="secondary"
+                >
+                    {{control.label}}
+                </mat-label>
+                <input 
+                    matInput 
+                    [formControl]="autocomplete" 
+                    [type]="control.type" 
+                    [placeholder]="control.placeholder"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete 
+                    autoActiveFirstOption 
+                    #auto="matAutocomplete" 
+                    (optionSelected)="onAutocompleteOptionSelected($event.option.value); onOptionSelected()"
+                    [displayWith]="displayFn"
+                >
+                    <mat-option *ngIf="isLoading" class="is-loading">
+                        <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                    </mat-option>
+                    <ng-container *ngIf="!isLoading">
+                        <mat-option *ngIf="control.showEmptyOption">{{ control.emptyOptionLabel || ''}}</mat-option>
+                        <ng-container *ngIf="control.optionKey; else option">
+                            <mat-option 
+                                *ngFor="let option of filteredOptions | async" 
+                                [value]="option.id"
+                            >
+                                {{option.value}}
+                            </mat-option>
+                        </ng-container>
+                        <ng-template #option>
+                            <mat-option 
+                                *ngFor="let option of filteredOptions | async" 
+                                [value]="option"
+                            >
+                                {{option.value}}
+                            </mat-option>
+                        </ng-template>
+                    </ng-container>
+                </mat-autocomplete>
+
+                <mat-error>
+                    <ng-container *ngTemplateOutlet="errors"></ng-container>
+                </mat-error>
+                
+            </mat-form-field>
+
+            <ng-template #select>
+                <mat-form-field  
+                    class="form-group col-md-12 col-sm-12"
+                    [appearance]="appearance"
+                    [floatLabel]="floatLabel"
+                >
+                    <mat-label  
+                        [attr.for]="control.key" 
+                        color="secondary">
+                        {{control.label}}
+                    </mat-label>
+                    <mat-select 
+                        [formControlName]="control.key"
+                        [type]="control.type"
+                        [placeholder]="control.placeholder" 
+                        [displayWith]="displayFn()"
+                        (selectionChange)="onOptionSelected()"
+                    >
+                        <mat-option *ngIf="isLoading" class="is-loading">
+                            <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                        </mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngIf="control.showEmptyOption">{{ control.emptyOptionLabel || '' }}</mat-option>
+                            <ng-container *ngIf="control.optionKey; else option">
+                                <mat-option 
+                                    *ngFor="let option of catalogues[control.key]" 
+                                    [value]="option.id"
+                                >
+                                    {{option.value}}
+                                </mat-option>
+                            </ng-container>
+                            <ng-template #option>
+                                <mat-option 
+                                    *ngFor="let option of catalogues[control.key]" 
+                                    [value]="option"
+                                >
+                                    {{option.value}}
+                                </mat-option>
+                            </ng-template>
+                        </ng-container>
+                    </mat-select>
+
+                    <mat-error>
+                        <ng-container *ngTemplateOutlet="errors"></ng-container>
+                    </mat-error>
+                    
+                </mat-form-field>
+
+            </ng-template>
+
+        </ng-container>
+
+        <!-- DATEPICKER -->
+        <mat-form-field 
+            *ngSwitchCase="'datepicker'" 
+            class="form-group col-md-12 col-sm-12"
+            [appearance]="appearance" 
+            [floatLabel]="floatLabel"
+        >
+            <mat-label 
+                [attr.for]="control.key" 
+                color="secondary"
+            >   
+                {{control.label}}
+            </mat-label>
+            <input 
+                matInput 
+                [formControlName]="control.key" 
+                [placeholder]="control.placeholder"
+                [matDatepicker]="picker">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+
+            <!-- Iterar sobre los validators del control y enviar el validador correspondiente -->
+            <mat-error>
+                <ng-container *ngTemplateOutlet="errors"></ng-container>
+            </mat-error>
+            
+
+        </mat-form-field>
+
+        <!-- TEXTAREA -->
+        <mat-form-field 
+            *ngSwitchCase="'textarea'" 
+            class="form-group col-md-12 col-sm-12"
+            [appearance]="appearance" 
+            [floatLabel]="floatLabel"
+        >
+            <mat-label 
+                [attr.for]="control.key" 
+                color="secondary"
+            >   
+                {{control.label}}
+            </mat-label>
+            <textarea 
+                matInput 
+                [formControlName]="control.key" 
+                [matTextareaAutosize]="autosize"
+                [rows]="control.rows"
+                [type]="control.type"
+                [placeholder]="control.placeholder">
+            </textarea>
+
+            <!-- Iterar sobre los validators del control y enviar el validador correspondiente -->
+            <mat-error>
+                <ng-container *ngTemplateOutlet="errors"></ng-container>
+            </mat-error>
+
+        </mat-form-field>
+
+        <!-- MULTISELECT -->
+        <mat-form-field  
+            *ngSwitchCase="'multi-select'" 
+            class="form-group col-md-12 col-sm-12"
+            [appearance]="appearance" 
+            [floatLabel]="floatLabel">
+            <mat-label 
+                [attr.for]="control.key" 
+                color="secondary"
+            >   
+                {{control.label}}
+            </mat-label>
+            <mat-select 
+                [formControlName]="control.key"
+                [type]="control.type"
+                [placeholder]="control.placeholder"
+                [displayWith]="displayFn"
+                multiple>
+                <mat-option *ngIf="isLoading" class="is-loading">
+                    <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                </mat-option>
+                <ng-container *ngIf="!isLoading">
+                    <mat-option *ngIf="control.showEmptyOption">{{ control.emptyOptionLabel || ''}}</mat-option>
+                    <ng-container *ngIf="control.optionKey; else option">
+                        <mat-option 
+                            *ngFor="let option of control.options" 
+                            [value]="optionKey">
+                            {{option.value}}
+                        </mat-option>
+                    </ng-container>
+                    <ng-template #option>
+                        <mat-option 
+                            *ngFor="let option of control.options" 
+                            [value]="option">
+                            {{option.value}}
+                        </mat-option>
+                    </ng-template>
+                </ng-container>
+            </mat-select>
+
+             <!-- Iterar sobre los validators del control y enviar el validador correspondiente -->
+             <mat-error>
+                <ng-container *ngTemplateOutlet="errors"></ng-container>
+            </mat-error>
+        </mat-form-field>
+
+        <!-- CHECKBOX -->
+        <mat-checkbox  
+            *ngSwitchCase="'checkbox'" 
+            [formControlName]="control.key"
+            class="form-group col-md-12 col-sm-12 text-label"
+            [color]="color"
+        >
+                {{control.label}}
+        </mat-checkbox>
+
+        <!-- RADIO BUTTON -->
+        <div 
+            *ngSwitchCase="'radio'" 
+            class="form-group col-md-12 col-sm-12 d-flex flex-column">
+            <label 
+                [attr.for]="control.key"
+                class="text-label">
+                {{control.label}}
+            </label>
+            <mat-radio-group
+                [formControlName]="control.key"
+                [color]="color">
+                    <mat-radio-button   
+                        *ngFor="let option of control.options" 
+                        class="mr-4"
+                        [value]="option.id"
+                        [checked]="option.checked">
+                        {{option.value}}
+                    </mat-radio-button>
+            </mat-radio-group>
+        </div>
+        
+       
+          
+
+        <!-- <app-select *ngSwitchCase="'select'" [form]="form" [control]="control">
+            <mat-error>
+                <ng-container *ngTemplateOutlet="errors"></ng-container>
+            </mat-error>
+        </app-select> -->
+          
+        
+    </div>
+
+</div>
+
+<ng-template #errors>
+    <div *ngIf="required">
+        {{ requiredLabel }}
+    </div>
+    <div *ngIf="pattern">
+        {{ patternLabel }}
+    </div>
+    <div *ngIf="maxlength">
+        {{ maxlengthLabel }}
+    </div>
+    <div *ngIf="minlength">
+        {{ minlengthLabel }}
+    </div>
+</ng-template>
+  

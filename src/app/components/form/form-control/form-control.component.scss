@@ -1,0 +1,9 @@
+.is-loading ::ng-deep .mat-option-text {
+  display: flex;
+  justify-content: center;
+}
+
+::ng-deep .mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: var(--cuti-white) !important;
+}

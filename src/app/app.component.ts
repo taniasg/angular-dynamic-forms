@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { FormControlBase } from './models/form/form-control.model';
+import { FormService } from './services/form/form.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +10,17 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angular-dynamic-form';
+  controls: Observable<FormControlBase<any>[]>;
+
+  constructor(private formService: FormService) {
+    this.controls = this.formService.getBusquedaUsuarioForm();
+  }
+
+  onStatusFormChanges(status: boolean): void {
+
+  }
+
+  onValueFormChanges(value: any): void {
+
+  }
 }
