@@ -8,7 +8,7 @@ export class FormControlBase<T> {
     controlType: string;
     type: string;
     class: string;
-    options: { key: string, value: string, checked?: boolean }[];
+    options: { key: string, value: string, checked?: boolean, id?: any }[];
     rows?: number;
     autosize?: boolean;
     disabled?: boolean;
@@ -28,7 +28,7 @@ export class FormControlBase<T> {
         controlType?: string;
         type?: string;
         class?: string;
-        options?: { key: string, value: string, checked?: boolean }[];
+        options?: { key: string, value: string, checked?: boolean, id?: any }[];
         rows?: number;
         autosize?: boolean;
         disabled?: boolean;

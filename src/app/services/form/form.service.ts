@@ -18,6 +18,186 @@ export class FormService {
 
 	constructor() { }
 
+	getFormControls(data: any) {
+		const controls = data.map((element: any, index: number) => {
+			switch (element.tipo_dato) {
+				case 'Texto':
+					return new Input({
+						key: element.label.toLowerCase().replaceAll(' ', '_'),
+						label: element.label,
+						placeholder: 'Escribe un texto',
+						value: '',
+						required: true,
+						validators: [
+							{
+								key: 'required',
+								value: true,
+								label: 'Escribe un texto'
+							},
+							{
+								key: 'pattern',
+								value: patterns.alphanumeric,
+								label: 'Por favor escribe un texto'
+							},
+							{
+								key: 'maxLength',
+								value: 25,
+								label: 'El texto no debe contener más de 50 caracteres'
+							}
+						],
+						class: "col-md-6 col-sm-12",
+						order: index + 1
+					});
+				case 'Lógico':
+					return new Radio({
+						key: element.label.toLowerCase().replaceAll(' ', '_'),
+						label: element.label,
+						placeholder: 'Selecciona una opción',
+						type: 'text',
+						value: '',
+						required: true,
+						class: "col-md-6 col-sm-12",
+						validators: [
+							{
+								key: 'required',
+								value: true,
+								label: 'Selecciona una opción'
+							}
+						],
+						options: [
+							{ key: '1', id: false, value: 'Falso' },
+							{ key: '2', id: true, value: 'Verdadero' },
+						],
+						order: index + 1
+					});
+				case 'Numérico':
+					return new Input({
+						key: element.label.toLowerCase().replaceAll(' ', '_'),
+						label: element.label,
+						placeholder: 'Ingresa un número',
+						value: '',
+						type: 'number',
+						required: true,
+						validators: [
+							{
+								key: 'required',
+								value: true,
+								label: 'Ingresa un número.'
+							},
+							{
+								key: 'pattern',
+								value: patterns.numeric,
+								label: 'Por favor ingresa un número'
+							},
+							{
+								key: 'maxLength',
+								value: 25,
+								label: 'El número no debe contener más de 50 caracteres'
+							}
+						],
+						class: "col-md-6 col-sm-12",
+						order: index + 1
+					});
+				case 'Fecha':
+					return new Datepicker({
+						key: element.label.toLowerCase().replaceAll(' ', '_'),
+						label: element.label,
+						placeholder: 'Selecciona una fecha',
+						type: 'date',
+						value: '',
+						required: true,
+						class: "col-md-6 col-sm-12",
+						validators: [
+							{
+								key: 'required',
+								value: true,
+								label: 'Selecciona una fecha'
+							}
+						],
+						order: index + 1
+					});
+				case 'Hora':
+					return new Input({
+						key: element.label.toLowerCase().replaceAll(' ', '_'),
+						label: element.label,
+						placeholder: 'Ingresa una hora',
+						value: '',
+						required: true,
+						validators: [
+							{
+								key: 'required',
+								value: true,
+								label: 'Ingresa una hora'
+							},
+							{
+								key: 'pattern',
+								value: patterns.time,
+								label: 'Por favor ingresa una hora'
+							}
+						],
+						class: "col-md-6 col-sm-12",
+						order: index + 1
+					});
+				case 'Decimal':
+					return new Input({
+						key: element.label.toLowerCase().replaceAll(' ', '_'),
+						label: element.label,
+						placeholder: 'Ingresa un decimal',
+						value: '',
+						required: true,
+						validators: [
+							{
+								key: 'required',
+								value: true,
+								label: 'Ingresa un decimal.'
+							},
+							{
+								key: 'pattern',
+								value: patterns.numeric,
+								label: 'Por favor ingresa un decimal'
+							},
+							{
+								key: 'maxLength',
+								value: 25,
+								label: 'El decimal no debe contener más de 50 caracteres'
+							}
+						],
+						class: "col-md-6 col-sm-12",
+						order: index + 1
+					});
+				default:
+					return new Input({
+						key: element.label.toLowerCase().replaceAll(' ', '_'),
+						label: element.label,
+						placeholder: 'Escribe un texto',
+						value: '',
+						required: true,
+						validators: [
+							{
+								key: 'required',
+								value: true,
+								label: 'Escribe un texto.'
+							},
+							{
+								key: 'pattern',
+								value: patterns.alphanumeric,
+								label: 'Por favor escribe un texto.'
+							},
+							{
+								key: 'maxLength',
+								value: 25,
+								label: 'El texto no debe contener más de 50 caracteres'
+							}
+						],
+						class: "col-md-6 col-sm-12",
+						order: index + 1
+					});
+			}
+		})
+
+		return of(controls.sort((a, b) => a.order - b.order));
+	}
+
 	getBusquedaUsuarioForm() {
 		const busquedaUsuarioForm: FormControlBase<string>[] = [
 			new Select({
@@ -386,7 +566,7 @@ export class FormService {
 				required: true,
 				class: "col-md-6 col-sm-12",
 				disabled: true,
-				validators: [	],
+				validators: [],
 				order: 10,
 				options: []
 			}),
