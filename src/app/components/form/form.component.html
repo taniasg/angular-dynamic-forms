@@ -8,7 +8,7 @@
         <button type="submit" [disabled]="!form.valid">Save</button>
       </div> -->
 	<div class="form-group col-md-3 col-sm-12" *ngIf="resetButton">
-		<button class="primary" (click)="resetForm()" type="button">
+		<button mat-flat-button class="primary" (click)="resetForm()" type="button">
 			{{resetLabel}}
 		</button>
 	</div>

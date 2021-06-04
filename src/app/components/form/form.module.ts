@@ -19,6 +19,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormDirective } from './form.directive';
+import { MatButtonModule } from '@angular/material/button';
 @NgModule({
 	declarations: [FormComponent, FormControlComponent, FormDirective],
 	imports: [
@@ -31,7 +32,8 @@ import { FormDirective } from './form.directive';
 		MatDatepickerModule,
 		// MatNativeDateModule,
 		MatRadioModule,
-		MatProgressSpinnerModule
+		MatProgressSpinnerModule,
+		MatButtonModule
 	],
 	exports: [FormComponent],
 	providers: [FormControlService]
